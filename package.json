@@ -1,0 +1,28 @@
+{
+  "name": "littoral-zone",
+  "version": "0.1.0",
+  "description": "A RESTful API for Canadian tide data.",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "test": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bight/littoral-zone.git"
+  },
+  "keywords": [
+    "tide",
+    "api"
+  ],
+  "author": "Ned Zimmerman <ned@bight.ca>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bight/littoral-zone/issues"
+  },
+  "homepage": "https://github.com/bight/littoral-zone#readme",
+  "dependencies": {
+    "hapi": "^16.4.3",
+    "strong-soap": "^1.2.6"
+  }
+}
