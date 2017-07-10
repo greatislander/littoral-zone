@@ -1,10 +1,10 @@
 'use strict';
 
-const Hapi = require('hapi');
+const hapi = require('hapi');
 const soap = require('strong-soap').soap;
+const moment = require ('moment');
 
-// Create a server with a host and port
-const server = new Hapi.Server();
+const server = new hapi.Server();
 server.connection({
     host: 'localhost',
     port: 8000
@@ -13,30 +13,30 @@ server.connection({
 // Add the route
 server.route({
   method: 'GET',
-  path:'/hello',
+  path:'/levels/{latitude},{longitude}/',
   handler: function (request, reply) {
-    const url = 'https://ws-shc.qc.dfo-mpo.gc.ca/predictions?wsdl';
+    const endpoint = 'https://ws-shc.qc.dfo-mpo.gc.ca/predictions?wsdl';
+
     const requestArgs = {
       dataName: 'hilo',
-      latitudeMin: 43.7959,
-      latitudeMax: 44.3592,
-      longitudeMin: -65.1201,
-      longitudeMax: -64.1574,
+      latitudeMin: parseFloat(request.params.latitude) - 0.2,
+      latitudeMax: parseFloat(request.params.latitude) + 0.2,
+      longitudeMin: parseFloat(request.params.longitude) - 0.2,
+      longitudeMax: parseFloat(request.params.longitude) + 0.2,
       depthMin: 0.0,
       depthMax: 0.0,
-      dateMin: '2017-08-01 00:00:00', // UTC
-      dateMax: '2017-08-01 23:59:59', // UTC
+      dateMin: moment().format('YYYY-DD-MM HH:mm:ss'), // UTC
+      dateMax: moment().add(1, 'days').format('YYYY-DD-MM HH:mm:ss'), // UTC
       start: 1,
       sizeMax: 100,
-      metadata: false,
-      metadataSelection: [
-        'station_name'
-      ],
+      metadata: true,
+      metadataSelection: '',
       order: 'asc'
     };
+
     const options = {};
 
-    soap.createClient(url, options, function(err, client) {
+    soap.createClient(endpoint, options, function(err, client) {
       const method = client['search'];
       method(requestArgs, function(err, result, envelope, soapHeader) {
         reply( result );
@@ -47,9 +47,8 @@ server.route({
 
 // Start the server
 server.start((err) => {
-
     if (err) {
-        throw err;
+      throw err;
     }
     console.log('Server running at:', server.info.uri);
 });
