@@ -25,10 +25,11 @@
     "JSONSelect": "^0.4.0",
     "hapi": "^16.4.3",
     "json-mask": "^0.3.8",
-    "moment": "^2.18.1",
+    "moment": "^2.22.2",
     "prettier": "^1.5.3",
-    "strong-soap": "^1.2.6"
+    "strong-soap": "^1.9.0"
   },
   "devDependencies": {
+    "ava": "^0.25.0"
   }
 }
