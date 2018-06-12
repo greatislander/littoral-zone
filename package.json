@@ -23,7 +23,7 @@
   "homepage": "https://github.com/greatislander/littoral-zone#readme",
   "dependencies": {
     "JSONSelect": "^0.4.0",
-    "hapi": "^16.4.3",
+    "hapi": "^17.5.1",
     "json-mask": "^0.3.8",
     "moment": "^2.22.2",
     "prettier": "^1.5.3",
