@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/greatislander/littoral-zone.git"
+    "url": "git+https://gitlab.com/greatislander/littoral-zone.git"
   },
   "keywords": [
     "tide",
     "api"
   ],
   "author": "Ned Zimmerman <ned@bight.ca>",
-  "license": "MIT",
+  "license": "GPL-2.0+",
   "bugs": {
-    "url": "https://github.com/greatislander/littoral-zone/issues"
+    "url": "https://gitlab.com/greatislander/littoral-zone/issues"
   },
-  "homepage": "https://github.com/greatislander/littoral-zone#readme",
+  "homepage": "https://gitlab.com/greatislander/littoral-zone#readme",
   "dependencies": {
     "JSONSelect": "^0.4.0",
     "hapi": "^17.5.2",
