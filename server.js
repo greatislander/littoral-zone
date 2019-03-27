@@ -1,10 +1,53 @@
 'use strict';
 
-const { soap } = require('strong-soap');
+const soap = require('soap-as-promised');
 const { send } = require('micro');
 const moment  = require('moment');
 const jsonselect = require('JSONSelect');
 const { router, get } = require('microrouter')
+
+const processLevels = (result) => {
+    const data = {};
+    result.searchReturn.data.data.forEach(value => {
+        const datetime = jsonselect.match(
+            'object:root .boundaryDate .min ."$value"',
+            value
+        )[0];
+        const stationId = jsonselect.match(
+            'object:root .metadata ."$value"',
+            value
+        )[1];
+        const stationName = jsonselect.match(
+            'object:root .metadata ."$value"',
+            value
+        )[3];
+        const latitude = jsonselect.match(
+            'object:root .spatialCoordinates .latitude ."$value"',
+            value
+        )[0];
+        const longitude = jsonselect.match(
+            'object:root .spatialCoordinates .longitude ."$value"',
+            value
+        )[0];
+        const level = jsonselect.match(
+            'object:root > .value ."$value"',
+            value
+        )[0];
+        if (!data.hasOwnProperty(stationId)) {
+            data[stationId] = {
+                stationName: stationName,
+                latitude: latitude,
+                longitude: longitude,
+                levels: []
+            };
+        }
+        data[stationId].levels.push({
+            datetime,
+            level
+        });
+    });
+    return data;
+}
 
 const levels = async (req, res) => {
     const endpoint = 'https://ws-shc.qc.dfo-mpo.gc.ca/predictions?wsdl';
@@ -17,7 +60,7 @@ const levels = async (req, res) => {
         depthMin: 0.0,
         depthMax: 0.0,
         dateMin: moment().format('YYYY-MM-DD HH:mm:ss'), // UTC
-        dateMax: moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss'), // UTC
+        dateMax: moment().add(2, 'days').format('YYYY-MM-DD HH:mm:ss'), // UTC
         start: 1,
         sizeMax: 100,
         metadata: true,
@@ -25,53 +68,22 @@ const levels = async (req, res) => {
         order: 'asc'
     };
 
-    soap.createClient(endpoint, {}, async (err, client) => {
-        if (err) {
-            send(res, 500, 'Service not available.');
+    const response = await soap.createClient(endpoint)
+    .then((client) => client.search(requestArgs)
+    .then((result) => {
+        return {
+            code: 200,
+            data: processLevels(result)
+        };
+    })
+    .catch((error) => {
+        return {
+            code: 500,
+            data: error
         }
-        client.search(requestArgs).then(({result}) => {
-            console.log(result);
-            const data = [];
-            result.searchReturn.data.data.forEach(value => {
-                const datetime = jsonselect.match(
-                    'object:root .boundaryDate .min ."$value"',
-                    value
-                )[0];
-                const stationId = jsonselect.match(
-                    'object:root .metadata ."$value"',
-                    value
-                )[1];
-                const stationName = jsonselect.match(
-                    'object:root .metadata ."$value"',
-                    value
-                )[3];
-                const latitude = jsonselect.match(
-                    'object:root .spatialCoordinates .latitude ."$value"',
-                    value
-                )[0];
-                const longitude = jsonselect.match(
-                    'object:root .spatialCoordinates .longitude ."$value"',
-                    value
-                )[0];
-                const level = jsonselect.match(
-                    'object:root > .value ."$value"',
-                    value
-                )[0];
-                data.push({
-                    datetime,
-                    stationId,
-                    stationName,
-                    latitude,
-                    longitude,
-                    level
-                });
-            });
-            console.log(data);
-          }, (err) => {
-            console.error(err);
-          });
-    });
-    send(res, 200, {});
+    }));
+
+    send(res, response.code, response.data);
 }
 
 module.exports = router(get('/levels/:latitude/:longitude', levels))
