@@ -33,11 +33,11 @@ const processLevels = (result) => {
             'object:root > .value ."$value"',
             value
         )[0];
-        if (!data.hasOwnProperty(stationId)) {
+        if (!Object.prototype.hasOwnProperty.call(data, stationId)) {
             data[stationId] = {
-                stationName: stationName,
-                latitude: latitude,
-                longitude: longitude,
+                stationName,
+                latitude,
+                longitude,
                 levels: []
             };
         }
