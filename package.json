@@ -18,7 +18,7 @@
     "api"
   ],
   "author": "Ned Zimmerman <ned@bight.ca>",
-  "license": "GPL-2.0+",
+  "license": "gpl-3.0-or-later",
   "bugs": {
     "url": "https://github.com/greatislander/littoral-zone/issues"
   },
