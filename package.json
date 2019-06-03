@@ -33,7 +33,7 @@
     "soap-as-promised": "^1.26.0"
   },
   "devDependencies": {
-    "ava": "^1.4.1",
+    "ava": "^2.0.0",
     "micro-dev": "^3.0.0",
     "prettier": "^1.17.1",
     "xo": "^0.24.0"
