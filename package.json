@@ -35,7 +35,7 @@
   "devDependencies": {
     "ava": "^2.0.0",
     "micro-dev": "^3.0.0",
-    "prettier": "^1.18.1",
+    "prettier": "^1.18.2",
     "xo": "^0.24.0"
   },
   "xo": {
