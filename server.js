@@ -59,8 +59,8 @@ const levels = async (req, res) => {
         latitudeMax: parseFloat(req.params.latitude) + 0.2,
         longitudeMin: parseFloat(req.params.longitude) - 0.2,
         longitudeMax: parseFloat(req.params.longitude) + 0.2,
-        depthMin: 0.0,
-        depthMax: 0.0,
+        depthMin: 0,
+        depthMax: 0,
         dateMin: moment().format('YYYY-MM-DD HH:mm:ss'), // UTC
         dateMax: moment().add(2, 'days').format('YYYY-MM-DD HH:mm:ss'), // UTC
         start: 1,
