@@ -7,12 +7,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Install
-      uses: actions/npm@59b64a598378f31e49cb76f27d6f3312b582f680
+      uses: actions/npm@v1
       with:
         entrypoint: npm
         args: ci
     - name: Run test
-      uses: actions/npm@59b64a598378f31e49cb76f27d6f3312b582f680
+      uses: actions/npm@v1
       with:
         entrypoint: npm
         args: run test
