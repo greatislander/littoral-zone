@@ -1,18 +1,19 @@
 on: push
 name: Run tests
 jobs:
-  install:
-    name: Install
+  test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Install
-      uses: actions/npm@v1
+    - uses: actions/checkout@v1
+    - name: Cache node modules
+      uses: actions/cache@v1
       with:
-        entrypoint: npm
-        args: ci
-    - name: Run test
-      uses: actions/npm@v1
-      with:
-        entrypoint: npm
-        args: run test
+        path: node_modules
+        key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+    - name: npm install, test, and build
+      run: |
+        npm install
+        npm test
+        npm run build
+      env:
+        CI: true
